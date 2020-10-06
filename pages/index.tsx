@@ -3,22 +3,18 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import styles from "../styles/Home.module.css";
 
-const { CONTENT_API_KEY, BLOG_URL } = process.env;
-
-type Post = {
-  title: string;
-  slug: string;
-  excerpt: string;
+type IFiles = {
+  name: string;
+  path: string;
+  download_url: string;
 };
 
-async function getPosts(): Promise<Post[]> {
+async function getPosts(): Promise<IFiles[]> {
   // curl "https://demo.ghost.io/ghost/api/v3/content/
   const res = await fetch(
-    `${BLOG_URL}/ghost/api/v3/content/posts/?key=${CONTENT_API_KEY}&fields=title,slug,excerpt`
+    `https://api.github.com/repos/gray-rabbit/next_blog/contents/markdown`
   ).then((r) => r.json());
-  const rest = res.posts;
-  console.log(rest);
-  return rest;
+  return res;
 }
 
 export const getStaticProps = async ({ params }) => {
@@ -33,7 +29,7 @@ export default function Home({
   posts,
   children,
 }: {
-  posts: Post[];
+  posts: IFiles[];
   children?: React.ReactNode;
 }) {
   return (
@@ -43,14 +39,13 @@ export default function Home({
         {posts.map((post, index) => {
           return (
             <li key={index}>
-              <Link href="/post/[slug]" as={`/post/${post.slug}`}>
-                <a>{post.title}</a>
+              <Link href="/classroom/[id]" as={`/classroom/${post.name}`}>
+                <a>{post.name}</a>
               </Link>
             </li>
           );
         })}
       </ul>
-      <p>되냐?</p>
     </div>
   );
 }
