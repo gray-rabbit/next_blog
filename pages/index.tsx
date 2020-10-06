@@ -14,6 +14,7 @@ async function getPosts(): Promise<IFiles[]> {
   const res = await fetch(
     `https://api.github.com/repos/gray-rabbit/next_blog/contents/markdown`
   ).then((r) => r.json());
+  console.log(res);
   return res;
 }
 
@@ -39,7 +40,10 @@ export default function Home({
         {posts.map((post, index) => {
           return (
             <li key={index}>
-              <Link href="/classroom/[id]" as={`/classroom/${post.name}`}>
+              <Link
+                href="/classroom/[id]"
+                as={`/classroom/${post.name.split(".")[0]}`}
+              >
                 <a>{post.name}</a>
               </Link>
             </li>
