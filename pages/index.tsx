@@ -19,7 +19,6 @@ async function getPosts(): Promise<IFiles[]> {
 }
 
 export const getStaticProps = async ({ params }) => {
-  console.log(params);
   const posts = await getPosts();
   return {
     props: { posts },
