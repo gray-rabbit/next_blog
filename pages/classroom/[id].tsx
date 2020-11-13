@@ -35,8 +35,12 @@ export default function Classroom(props) {
   }
   console.log(props);
   return (
-    <div className="box mt-3">
-      <ReactMarkdown children={props.data}></ReactMarkdown>
+    <div className="container">
+      <div className="box mt-3">
+        <ReactMarkdown children={props.data}></ReactMarkdown>
+      </div>
+
+      <button className="mt-3 button is-danger is-fullwidth">뒤로</button>
     </div>
   );
 }
