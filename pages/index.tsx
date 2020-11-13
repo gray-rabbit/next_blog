@@ -21,18 +21,24 @@ async function getPosts(): Promise<IFiles[]> {
 
 export const getStaticProps = async ({ params }) => {
   const posts = await getPosts();
-  posts.map(r => {
+  const newPosts = posts.map(r => {
     try {
       const [date, title] = r.name.split('_')
+
       return {
         ...r,
+        date,
+        title: title.split('.md')[0]
       }
     } catch (e) {
       return r;
     }
+  }).sort((a, b) => {
+    if (a > b) return 1
+    else return -1
   })
   return {
-    props: { posts },
+    props: { posts: newPosts },
   };
 };
 
@@ -43,24 +49,35 @@ export default function Home({
   posts: IFiles[];
   children?: React.ReactNode;
 }) {
+  console.log(posts);
   return (
     <div className="container"  >
-      <h1 className="title is-4">HelloBlog</h1>
-      <button className="button is-danger">하하하</button>
-      <ul>
-        {posts.map((post, index) => {
-          return (
-            <li key={index}>
-              <Link
-                href="/classroom/[id]"
-                as={`/classroom/${post.name.split(".")[0]}`}
-              >
-                <a>{post.name}</a>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+      <div className="section">
+        <h1 className="title is-4">GrayRabbiT Dev Log 맨땅에 삽질은 이런것</h1>
+      </div>
+      <div className="m-5">
+        <ul>
+          {posts.map((post, index) => {
+            return (
+              <li key={index} className="my-3 has-text-left is-flex ">
+                <Link
+                  href="/classroom/[id]"
+                  as={`/classroom/${post.name.split(".")[0]}`}
+                >
+                  <a className="button is-flex-grow-1 is-justify-content-space-between">
+                    <span>
+                      {post.title}
+                    </span>
+                    <span>
+                      {post.date}
+                    </span>
+                  </a>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
